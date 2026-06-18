@@ -2,30 +2,6 @@
    MAI SALEEM COUTURE — site script
    ============================================================ */
 
-/* ---------- TEMP diagnostic badge (remove after debugging) ---------- */
-(function () {
-  function mount() {
-    var b = document.createElement('div');
-    b.id = '__dbg';
-    b.style.cssText = 'position:fixed;left:10px;bottom:10px;z-index:2147483647;' +
-      'background:#1fa463;color:#fff;font:13px/1.3 -apple-system,monospace;' +
-      'padding:7px 11px;border-radius:8px;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.5)';
-    b.textContent = 'JS ✓ · taps: 0';
-    document.body.appendChild(b);
-    var n = 0;
-    var bump = function (e) {
-      n++;
-      var t = e.target || {};
-      b.textContent = 'JS ✓ · taps: ' + n + ' · ' + (t.tagName || '?') + (t.id ? '#' + t.id : '');
-    };
-    // capture phase on window: fires for ANY tap/click anywhere, before anything can swallow it
-    window.addEventListener('click', bump, true);
-    window.addEventListener('touchstart', bump, true);
-  }
-  if (document.body) mount();
-  else document.addEventListener('DOMContentLoaded', mount);
-})();
-
 /* ---------- Gallery source ---------- */
 const GALLERY = {
   dresses: [
@@ -215,10 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setLang(document.documentElement.lang === 'ar' ? 'en' : 'ar');
   });
 
-  // Loader
-  window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('loader').classList.add('is-hidden'), 350);
-  });
+  // Loader — hide quickly once the DOM is ready (do NOT wait for every image to
+  // finish, which can take many seconds and leaves the splash blocking the page).
+  const hideLoader = () => document.getElementById('loader')?.classList.add('is-hidden');
+  setTimeout(hideLoader, 500);
+  window.addEventListener('load', hideLoader);
 
   // Header solid on scroll
   const header = document.getElementById('header');
