@@ -140,6 +140,13 @@ function setLang(lang) {
   try { localStorage.setItem('ms-lang', lang); } catch (e) {}
 }
 
+// Global handlers wired via inline onclick in the HTML (independent of event binding/timing)
+window.msToggleLang = function () {
+  setLang(document.documentElement.lang === 'ar' ? 'en' : 'ar');
+};
+window.msFilter = function (cat) { applyFilter(cat); };
+window.msOpenLightbox = function (src) { openLightbox(src); };
+
 /* ---------- Build gallery ---------- */
 function buildGallery() {
   const wrap = document.getElementById('gallery');
